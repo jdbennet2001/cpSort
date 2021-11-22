@@ -14,3 +14,8 @@ Set up directory structure for compiler
 go mod init github.com/jdbennet2001/cpSort/src/main 
 go mod tidy
 ```
+
+Installing command line parameters
+```
+go get <package>
+```
