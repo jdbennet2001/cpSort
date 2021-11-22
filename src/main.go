@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // this is a comment
@@ -35,11 +36,19 @@ func main() {
 func FilePathWalkDir(root string) ([]string, error) {
 	var files []string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		if !info.IsDir() {
-			files = append(files, path)
-		} else {
+
+		// Check if the parent directory has a '.' prefix
+		parent := filepath.Dir(path)
+		base := filepath.Base(parent)
+
+		if info.IsDir() {
 			fmt.Println(".. scanning ", info.Name())
+		} else if strings.HasPrefix(base, ".") || strings.HasPrefix(base, " ") {
+			fmt.Println(".. skipping ", path)
+		} else if strings.HasSuffix(path, "cbz") {
+			files = append(files, path)
 		}
+
 		return nil
 	})
 	return files, err
